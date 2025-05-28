@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Omborlar ro'yxati{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Omborlar ro'yxati</h2>
+    <ul class="list-group">
+        {% for warehouse in warehouses %}
+            <li class="list-group-item">{{ warehouse.name }}</li>
+        {% empty %}
+            <li class="list-group-item">Omborlar topilmadi.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
