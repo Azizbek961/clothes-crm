@@ -9,165 +9,153 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@1.0.0/dist/chartjs-adapter-moment.min.js"></script>
 
     <style>
-        /* --- Custom styles for dashboard --- */
-
-        /* Cards */
         .stat-card {
-            border-radius: 0.75rem;
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background: linear-gradient(to right, #4e54c8, #8f94fb);
+            color: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease-in-out;
         }
+
         .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 1rem 1.5rem rgba(0, 0, 0, 0.15);
+            transform: scale(1.05);
         }
 
-        /* Card Titles */
-        .stat-card .card-title {
-            font-weight: 700;
-            font-size: 1.25rem;
-            letter-spacing: 0.02em;
-        }
-
-        /* Card Text (numbers) */
-        .stat-card .card-text {
-            font-weight: 700;
-            font-size: 3rem;
-            letter-spacing: 0.05em;
-            margin: 0;
-        }
-
-        /* List Group Items */
-        .list-group-item {
-            font-size: 1rem;
-            letter-spacing: 0.02em;
-            border-left: 4px solid transparent;
-            transition: border-color 0.3s ease;
-        }
-        .list-group-item:hover {
-            border-left-color: #0d6efd;
-            background-color: #f8f9fa;
-            cursor: pointer;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 767.98px) {
-            .stat-card .card-text {
-                font-size: 2.5rem;
-            }
-        }
-
-        /* Section Titles */
-        .section-header {
+        .stat-title {
+            font-size: 1.2rem;
             font-weight: 600;
-            font-size: 1.5rem;
-            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 2.75rem;
+            font-weight: 800;
+        }
+
+        .section-header {
+            font-size: 1.75rem;
+            font-weight: bold;
+            color: #343a40;
+            margin-bottom: 1rem;
             border-bottom: 2px solid #0d6efd;
-            padding-bottom: 0.25rem;
-            margin-bottom: 1.5rem;
-            letter-spacing: 0.05em;
+            display: inline-block;
+            padding-bottom: 0.3rem;
+        }
+
+        .list-group-item {
+            padding: 1rem 1.25rem;
+            background-color: #f1f3f5;
+            border: none;
+            border-left: 5px solid transparent;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .list-group-item:hover {
+            background-color: #e9ecef;
+            border-left: 5px solid #0d6efd;
+        }
+
+        .card-shadow {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+            .stat-value {
+                font-size: 2.25rem;
+            }
         }
     </style>
 {% endblock %}
 
 {% block content %}
-<main class="container-fluid mt-5">
-    <header class="mb-5">
-        <h1 class="display-4 fw-bold text-primary">{{ title }}</h1>
-        <p class="text-muted fs-5">Dashboardga xush kelibsiz. Statistik ma'lumotlar va analitika quyida ko‘rsatilgan.</p>
+<main class="container mt-5">
+    <header class="mb-4">
+        <h1 class="text-primary display-5 fw-bold">{{ title }}</h1>
+        <p class="text-muted fs-5">Dashboardga xush kelibsiz. Statistik ma'lumotlar quyida keltirilgan.</p>
     </header>
 
     <!-- Stat Cards -->
-    <section aria-labelledby="statistics-header" class="mb-5">
-        <h2 id="statistics-header" class="section-header">Umumiy Statistikalar</h2>
+    <section class="mb-5">
+        <h2 class="section-header">Umumiy Statistikalar</h2>
         <div class="row g-4">
-            <article class="col-6 col-md-3">
-                <div class="card text-white bg-primary stat-card h-100">
-                    <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
-                        <h3 class="card-title">Jami Mahsulotlar</h3>
-                        <p class="card-text mb-0">{{ total_products }}</p>
-                    </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card">
+                    <div class="stat-title">Jami Mahsulotlar</div>
+                    <div class="stat-value">{{ total_products }}</div>
                 </div>
-            </article>
-            <article class="col-6 col-md-3">
-                <div class="card text-white bg-success stat-card h-100">
-                    <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
-                        <h3 class="card-title">Jami Buyurtmalar</h3>
-                        <p class="card-text mb-0">{{ total_orders }}</p>
-                    </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card">
+                    <div class="stat-title">Jami Buyurtmalar</div>
+                    <div class="stat-value">{{ total_orders }}</div>
                 </div>
-            </article>
-            <article class="col-6 col-md-3">
-                <div class="card text-white bg-info stat-card h-100">
-                    <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
-                        <h3 class="card-title">Jami Mijozlar</h3>
-                        <p class="card-text mb-0">{{ total_customers }}</p>
-                    </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card">
+                    <div class="stat-title">Jami Mijozlar</div>
+                    <div class="stat-value">{{ total_customers }}</div>
                 </div>
-            </article>
-            <article class="col-6 col-md-3">
-                <div class="card text-white bg-warning stat-card h-100">
-                    <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
-                        <h3 class="card-title">Jami Omborlar</h3>
-                        <p class="card-text mb-0">{{ total_warehouses }}</p>
-                    </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card">
+                    <div class="stat-title">Jami Omborlar</div>
+                    <div class="stat-value">{{ total_warehouses }}</div>
                 </div>
-            </article>
+            </div>
         </div>
     </section>
 
-    <hr class="my-5">
-
-    <!-- Latest Orders and Top Products -->
-    <section aria-labelledby="orders-products-header" class="mb-5">
-        <h2 id="orders-products-header" class="section-header">So‘nggi Buyurtmalar va Eng Ko‘p Sotilgan Mahsulotlar</h2>
+    <!-- Orders and Products -->
+    <section class="mb-5">
+        <h2 class="section-header">Buyurtmalar va Mahsulotlar</h2>
         <div class="row g-4">
             <!-- Latest Orders -->
-            <section class="col-lg-6" aria-label="Latest Orders">
-                <div class="card shadow-sm">
-                    <header class="card-header bg-light">
-                        <h3 class="mb-0 fs-5 fw-semibold">Eng oxirgi 5 ta buyurtma</h3>
-                    </header>
+            <div class="col-md-6">
+                <div class="card card-shadow">
+                    <div class="card-header bg-light">
+                        <h3 class="fw-semibold fs-6 mb-0">Oxirgi 5 ta Buyurtma</h3>
+                    </div>
                     <div class="card-body">
                         {% if latest_orders %}
-                            <ul class="list-group list-group-flush">
+                            <ul class="list-group">
                                 {% for order in latest_orders %}
-                                <li class="list-group-item" tabindex="0" role="listitem" aria-label="Buyurtma raqami {{ order.id }}, mijoz {{ order.customer.name }}, summa {{ order.total_amount }} so‘m, sana {{ order.order_date|date:"Y-m-d H:i" }}">
-                                    <strong>Buyurtma #{{ order.id }}</strong> — Mijoz: {{ order.customer.name }} —
-                                    <span class="text-success fw-bold">{{ order.total_amount }} UZS</span> —
+                                <li class="list-group-item">
+                                    <strong>#{{ order.id }}</strong> - {{ order.customer.name }} -
+                                    <span class="text-success fw-bold">{{ order.total_amount }} UZS</span> -
                                     <time datetime="{{ order.order_date|date:'c' }}">{{ order.order_date|date:"Y-m-d H:i" }}</time>
                                 </li>
                                 {% endfor %}
                             </ul>
                         {% else %}
-                            <p class="text-muted fst-italic">Hozircha buyurtmalar mavjud emas.</p>
+                            <p class="text-muted fst-italic">Hozircha buyurtmalar yoʻq.</p>
                         {% endif %}
                     </div>
                 </div>
-            </section>
+            </div>
 
-            <!-- Top Products Chart -->
-            <section class="col-lg-6" aria-label="Top Selling Products">
-                <div class="card shadow-sm">
-                    <header class="card-header bg-light">
-                        <h3 class="mb-0 fs-5 fw-semibold">Eng ko'p sotilgan mahsulotlar (miqdori bo'yicha)</h3>
-                    </header>
+            <!-- Top Products -->
+            <div class="col-md-6">
+                <div class="card card-shadow">
+                    <div class="card-header bg-light">
+                        <h3 class="fw-semibold fs-6 mb-0">Eng Ko‘p Sotilgan Mahsulotlar</h3>
+                    </div>
                     <div class="card-body">
-                        <canvas id="topProductsChart" role="img" aria-label="Eng ko'p sotilgan mahsulotlar diagrammasi"></canvas>
+                        <canvas id="topProductsChart"></canvas>
                     </div>
                 </div>
-            </section>
+            </div>
         </div>
     </section>
 
-    <hr class="my-5">
-
     <!-- Daily Sales Chart -->
-    <section aria-labelledby="daily-sales-header">
-        <h2 id="daily-sales-header" class="section-header">Kunlik Savdo Dinamikasi (oxirgi 30 kun)</h2>
-        <div class="card shadow-sm">
+    <section class="mb-5">
+        <h2 class="section-header">Kunlik Savdo (oxirgi 30 kun)</h2>
+        <div class="card card-shadow">
             <div class="card-body">
-                <canvas id="dailySalesChart" role="img" aria-label="Kunlik savdo diagrammasi"></canvas>
+                <canvas id="dailySalesChart"></canvas>
             </div>
         </div>
     </section>
@@ -175,36 +163,20 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // Kunlik savdo diagrammasi
         fetch('{% url "daily_sales_api" %}')
             .then(res => res.json())
             .then(data => {
-                const ctx = document.getElementById('dailySalesChart').getContext('2d');
-                new Chart(ctx, {
+                new Chart(document.getElementById('dailySalesChart'), {
                     type: 'line',
-                    data: data,
+                    data,
                     options: {
                         responsive: true,
-                        plugins: {
-                            title: { display: false },
-                            tooltip: { mode: 'index', intersect: false },
-                            legend: { display: false }
-                        },
-                        interaction: {
-                            mode: 'nearest',
-                            axis: 'x',
-                            intersect: false
-                        },
+                        plugins: { tooltip: { mode: 'index' }, legend: { display: false } },
                         scales: {
                             x: {
                                 type: 'time',
-                                time: {
-                                    unit: 'day',
-                                    tooltipFormat: 'YYYY-MM-DD',
-                                    displayFormats: { day: 'MMM dd' }
-                                },
-                                title: { display: true, text: 'Sana' },
-                                ticks: { maxRotation: 0, autoSkip: true }
+                                time: { unit: 'day', tooltipFormat: 'YYYY-MM-DD' },
+                                title: { display: true, text: 'Sana' }
                             },
                             y: {
                                 beginAtZero: true,
@@ -213,38 +185,25 @@
                         }
                     }
                 });
-            })
-            .catch(err => console.error('Error fetching daily sales data:', err));
+            });
 
-        // Eng ko'p sotilgan mahsulotlar diagrammasi
         fetch('{% url "top_products_api" %}')
             .then(res => res.json())
             .then(data => {
-                const ctx = document.getElementById('topProductsChart').getContext('2d');
-                new Chart(ctx, {
+                new Chart(document.getElementById('topProductsChart'), {
                     type: 'bar',
-                    data: data,
+                    data,
                     options: {
                         responsive: true,
                         indexAxis: 'y',
-                        plugins: {
-                            title: { display: false },
-                            legend: { display: false },
-                            tooltip: { enabled: true }
-                        },
+                        plugins: { tooltip: { mode: 'index' }, legend: { display: false } },
                         scales: {
-                            x: {
-                                beginAtZero: true,
-                                title: { display: true, text: 'Sotilgan miqdor' }
-                            },
-                            y: {
-                                title: { display: true, text: 'Mahsulot nomi' }
-                            }
+                            x: { beginAtZero: true, title: { display: true, text: 'Miqdori' } },
+                            y: { title: { display: true, text: 'Mahsulotlar' } }
                         }
                     }
                 });
-            })
-            .catch(err => console.error('Error fetching top products data:', err));
+            });
     });
 </script>
 {% endblock %}

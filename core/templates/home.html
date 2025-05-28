@@ -3,93 +3,87 @@
 {% block title %}Bosh sahifa - Ulgurji ERP/CRM/WMS{% endblock %}
 
 {% block content %}
-<main class="py-5">
-  <section class="bg-light rounded-4 py-5 mb-5 shadow-sm">
-    <div class="container text-center">
-      <h1 class="display-4 fw-bold mb-3">Ulgurji Kompaniyasi Bulutli Tizimlarga Xush Kelibsiz!</h1>
-      <p class="lead mx-auto mb-4" style="max-width: 720px;">
-        Bizning zamonaviy ERP, CRM va WMS yechimlarimiz orqali biznesingizni yangi bosqichga olib chiqing.
+<main class="py-5" style="background: linear-gradient(135deg, #f5f7fa, #c3cfe2); min-height: 100vh;">
+  <section class="container text-center mb-5">
+    <div class="rounded-4 shadow-lg p-5" style="background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px);">
+      <h1 class="fw-bold display-5 mb-3 text-primary">Bulutli CRM Tizimlariga Xush Kelibsiz!</h1>
+      <p class="lead mx-auto mb-4" style="max-width: 700px;">
+        Biznesingizni raqamlashtiring va zamonaviy texnologiyalar yordamida rivojlantiring.
       </p>
-      <hr class="my-4" style="width: 60px; border-top: 3px solid #0d6efd; margin-left:auto; margin-right:auto;">
-      <p class="mb-4">Quyidagi imkoniyatlar bilan tanishishingiz mumkin:</p>
-      <div class="d-flex justify-content-center gap-3 flex-wrap">
-        <a class="btn btn-primary btn-lg d-flex align-items-center gap-2 px-4" href="{% url 'products:product_list' %}" role="button" aria-label="Mahsulotlarni ko'rish">
-          Mahsulotlarni ko'rish <i class="fas fa-box fa-lg"></i>
+      <div class="d-flex justify-content-center flex-wrap gap-3 mt-4">
+        <a class="btn btn-gradient btn-lg px-4 shadow" href="{% url 'products:product_list' %}">
+          <i class="fas fa-box me-2"></i> Mahsulotlar
         </a>
-        <a class="btn btn-outline-secondary btn-lg d-flex align-items-center gap-2 px-4" href="{% url 'admin:index' %}" role="button" aria-label="Admin Paneli">
-          Admin Paneli <i class="fas fa-tools fa-lg"></i>
+        <a class="btn btn-outline-dark btn-lg px-4 shadow" href="{% url 'admin:index' %}">
+          <i class="fas fa-tools me-2"></i> Admin Panel
         </a>
       </div>
     </div>
   </section>
 
   <section class="container">
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-      <!-- Biznes Operatsiyalarini Optimallashtirish -->
-      <article class="col">
-        <div class="card h-100 shadow-sm border-0 rounded-4 hover-scale transition">
-          <div class="card-body text-center px-4 py-5">
-            <div class="mb-4 text-primary">
-              <i class="fas fa-chart-line fa-4x"></i>
-            </div>
-            <h3 class="h5 card-title fw-semibold mb-3">Biznes Operatsiyalarini Optimallashtirish</h3>
-            <p class="card-text text-muted mb-4">
-              Bulutli yechimlar orqali operatsion samaradorlikni oshiring va xarajatlarni kamaytiring.
-            </p>
-            <a href="#" class="btn btn-outline-primary btn-sm px-4 fw-semibold">Batafsil</a>
+    <div class="row g-4">
+      {% for card in cards %}
+      <div class="col-md-4">
+        <div class="card h-100 border-0 rounded-4 p-4 shadow-sm glass-effect text-center">
+          <div class="icon-wrapper mb-4">
+            <i class="{{ card.icon }} fa-3x text-gradient"></i>
           </div>
+          <h5 class="fw-semibold">{{ card.title }}</h5>
+          <p class="text-muted mb-4">{{ card.description }}</p>
+          <a href="#" class="btn btn-sm btn-outline-primary">Batafsil</a>
         </div>
-      </article>
-
-      <!-- Mijozlar Tajribasini Yaxshilash -->
-      <article class="col">
-        <div class="card h-100 shadow-sm border-0 rounded-4 hover-scale transition">
-          <div class="card-body text-center px-4 py-5">
-            <div class="mb-4 text-success">
-              <i class="fas fa-headset fa-4x"></i>
-            </div>
-            <h3 class="h5 card-title fw-semibold mb-3">Mijozlar Tajribasini Yaxshilash</h3>
-            <p class="card-text text-muted mb-4">
-              Mijozlar bilan aloqalarni mustahkamlang va ularga tezkor, sifatli xizmat ko'rsating.
-            </p>
-            <a href="#" class="btn btn-outline-success btn-sm px-4 fw-semibold">Batafsil</a>
-          </div>
-        </div>
-      </article>
-
-      <!-- Miqyoslanuvchan Bulut Infratuzilmasi -->
-      <article class="col">
-        <div class="card h-100 shadow-sm border-0 rounded-4 hover-scale transition">
-          <div class="card-body text-center px-4 py-5">
-            <div class="mb-4 text-info">
-              <i class="fas fa-cloud fa-4x"></i>
-            </div>
-            <h3 class="h5 card-title fw-semibold mb-3">Miqyoslanuvchan Bulut Infratuzilmasi</h3>
-            <p class="card-text text-muted mb-4">
-              Talabga qarab resurslarni kengaytiring va biznesingizni erkin rivojlantiring.
-            </p>
-            <a href="#" class="btn btn-outline-info btn-sm px-4 fw-semibold">Batafsil</a>
-          </div>
-        </div>
-      </article>
+      </div>
+      {% endfor %}
     </div>
   </section>
 </main>
 
 <style>
-  /* Hover scale effect for cards */
-  .hover-scale {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  .hover-scale:hover {
-    transform: translateY(-8px) scale(1.03);
-    box-shadow: 0 8px 20px rgba(13, 110, 253, 0.3);
+  .btn-gradient {
+    background: linear-gradient(to right, #4facfe, #00f2fe);
+    color: white;
+    border: none;
   }
 
-  /* Responsive text sizes for header */
+  .btn-gradient:hover {
+    background: linear-gradient(to right, #00f2fe, #4facfe);
+    color: white;
+    transform: scale(1.05);
+  }
+
+  .glass-effect {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .glass-effect:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .icon-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #e0eaff;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+    border-radius: 50%;
+  }
+
+  .text-gradient {
+    background: linear-gradient(to right, #4facfe, #00f2fe);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
   @media (max-width: 576px) {
-    h1.display-4 {
-      font-size: 2.5rem;
+    h1.display-5 {
+      font-size: 2rem;
     }
   }
 </style>
