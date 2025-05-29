@@ -7,7 +7,6 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('', views.home_view, name='home'), # Bosh sahifa URL
     path('dashboard/', views.dashboard_view, name='dashboard'), # Statistika paneli URL
 
