@@ -9,7 +9,6 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', views.home_view, name='home'), # Bosh sahifa URL
     path('dashboard/', views.dashboard_view, name='dashboard'), # Statistika paneli URL
-
     # Ilova URL'lari
     path('products/', include('products.urls')),
     path('customers/', include('customers.urls')),
