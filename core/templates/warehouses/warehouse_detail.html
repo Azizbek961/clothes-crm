@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}{{ warehouse.name }} tafsilotlari{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>{{ warehouse.name }}</h2>
+    <p><strong>Manzil:</strong> {{ warehouse.location|default:"-" }}</p>
+    <p><strong>Sig'imi:</strong> {{ warehouse.capacity_sqm }} kv.m</p>
+    <p><strong>Mas'ul shaxs:</strong> {{ warehouse.contact_person|default:"-" }}</p>
+    <p><strong>Telefon:</strong> {{ warehouse.phone_number|default:"-" }}</p>
+    <p><strong>Email:</strong> {{ warehouse.email|default:"-" }}</p>
+    <p><strong>Holat:</strong> 
+        {% if warehouse.is_active %}
+            <span class="badge bg-success">Faol</span>
+        {% else %}
+            <span class="badge bg-secondary">NoFaol</span>
+        {% endif %}
+    </p>
+
+    <h4 class="mt-4">Inventar (mahsulotlar)</h4>
+    {% if warehouse.inventory_set.exists %}
+        <ul class="list-group">
+            {% for item in warehouse.inventory_set.all %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ item.product.name }}
+                    <span class="badge bg-primary rounded-pill">{{ item.quantity }} dona</span>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="alert alert-warning mt-2">Bu omborda mahsulot yo'q.</div>
+    {% endif %}
+</div>
+{% endblock %}

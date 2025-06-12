@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Omborni o'chirish{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="alert alert-danger">
+        <h4>Ogohlantirish!</h4>
+        <p>"{{ warehouse.name }}" omborini o'chirishga ishonchingiz komilmi?</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Ha, o'chiraman</button>
+            <a href="{% url 'warehouses:warehouse_list' %}" class="btn btn-secondary">Bekor qilish</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

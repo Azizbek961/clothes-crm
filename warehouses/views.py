@@ -209,3 +209,14 @@ def inventory_list(request):
         'page_title': 'Ombor Inventarlari'
     }
     return render(request, 'warehouses/inventory_list.html', context)
+
+
+
+@login_required
+def warehouse_delete(request, pk):
+    warehouse = get_object_or_404(Warehouse, pk=pk)
+    if request.method == 'POST':
+        warehouse.delete()
+        messages.success(request, "Ombor muvaffaqiyatli o'chirildi.")
+        return redirect('warehouses:warehouse_list')
+    return render(request, 'warehouses/warehouse_confirm_delete.html', {'warehouse': warehouse})
