@@ -1,4 +1,4 @@
-name: Django CI/CD
+name: Deploy to EC2
 
 on:
   push:
@@ -10,17 +10,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Set up SSH key from base64
+    - name: Write SSH key to file
       run: |
         mkdir -p ~/.ssh
-        echo "${{ secrets.EC2_SSH_KEY_BASE64 }}" | base64 -d > ~/.ssh/cloud.pem
+        echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/cloud.pem
         chmod 400 ~/.ssh/cloud.pem
         ssh-keyscan -H 13.48.104.165 >> ~/.ssh/known_hosts
 
-    - name: Deploy to EC2
+    - name: Connect and deploy
       run: |
         ssh -o StrictHostKeyChecking=no -i ~/.ssh/cloud.pem ubuntu@13.48.104.165 << 'EOF'
           cd ~/clothes-crm
