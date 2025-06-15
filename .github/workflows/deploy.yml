@@ -13,17 +13,18 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Set up SSH key
+    - name: Set up SSH key and known hosts
       run: |
         mkdir -p ~/.ssh
         echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/cloud.pem
         chmod 400 ~/.ssh/cloud.pem
+        ssh-keyscan -H 13.48.104.165 >> ~/.ssh/known_hosts
 
     - name: Deploy to EC2
       run: |
-        ssh -i  ~/.ssh/cloud.pem ubuntu@13.48.104.165 << 'EOF'
+        ssh -i ~/.ssh/cloud.pem ubuntu@13.48.104.165 << 'EOF'
           cd ~/your_project_folder
           git pull origin main
-          docker-compose down
+          docker-compose down --remove-orphans
           docker-compose up -d --build
         EOF
