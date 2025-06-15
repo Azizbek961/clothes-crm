@@ -23,7 +23,7 @@ jobs:
     - name: Deploy to EC2
       run: |
         ssh -i ~/.ssh/cloud.pem ubuntu@13.48.104.165 << 'EOF'
-          cd ~/your_project_folder
+          cd ~/your_project_folder  # <-- BU joyni loyihangiz joylashgan papkaga o'zgartiring
           git pull origin main
           docker-compose down --remove-orphans
           docker-compose up -d --build
