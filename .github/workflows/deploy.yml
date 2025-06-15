@@ -1,8 +1,9 @@
-name: Manual EC2 Deploy for Django Docker
+name: Deploy Django to EC2 via Docker
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - master
 
 jobs:
   deploy:
@@ -13,57 +14,23 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Add SSH key and setup host
-      run: |
-        mkdir -p ~/.ssh
-        cat << 'EOF' > ~/.ssh/cloud.pem
- -----BEGIN RSA PRIVATE KEY-----
-        MIIEogIBAAKCAQEA9Mo0NVoaPhhSam/qxOIpVeXGco9EXZHAS+0ooZBC6tRyDlMj
-        zcKlMObL/FhYPap3obRYglPHcGI1DOUcyY4HS0N47SD7hK8Rt7OsKmQDmwn/AfyP
-        jGZng1t+oqZzz+5gzpw9QhEQ8RqP/JKtSkM8BrYoUdpboUNPRbux+4sVeSDHfy+F
-        45Bcnxgwi8cH72h34eHAWc0pxAA0LcNy1A5Xk3CgVZgi3MGJR40CoVq0AeJ/zsyv
-        hTKp7PcNn5mq8X5V4BdNnZmFeZLXxsE8/LugZ6848aCFi26/qc25s1124sMft+Ak
-        tOvha5QgBCQivAi/8Uo7D4tsG561SYHZsNpEOQIDAQABAoIBADXiFJ/x13j3rZyU
-        Sh9QkTzBOW+aLbhTDvsnlxwJP1Gltf2FO4pdYDNlel1vrOzWC0NjCWCWxH3ugDL4
-        c9/CDcT5czLvYa4RQ1smh61FGq4UAzgSuh5zpDF8AGIZNcD9ff280pcqXopUCIHW
-        X6LLLflkO3fZEvZqdJaq/ECcmvtwV38lBdSBnClQNLe1oEdUS4SqGArb2PE0XI/b
-        dCNEnVik2obo+1xRrrUWcn9ntOEPN9RjTMMHTiJ7S1eTGr3CyjR5wu+zHfkEi7/r
-        QGFkbANjoKnvHUvf7RH2gzVOCk6CTn5XyDJvSBqXIosAE5i5Lcg0cQme3Gu9RmyJ
-        QJSkGAECgYEA/zV6cJJzYPm7Rnnj2V4SBBcgAX9z0U9I0I7E3O0mZIUB6bO0jEvu
-        AlyoRevSXaLo3H1hL62trys8CqJrPreopdnZ9is/GbSJ3YKoU6YpyJwAD89pQTtM
-        Y097BZKV9dBvJCuqinrQztvtPlPeqQWThKxT1JIiKmr7GiRy02vplIECgYEA9Yx1
-        JVT0y3e24nnoJqLcPXkZCsCViuf4M2Jf8FJKNuTMJEUNUkHNwlojh2dORK7CHQ+Q
-        LVqWmR+dl6W48LxYXiiYkKsjfGmrulZtuxTTQ6hXUX7IFfGQMKovsDEVTvKopcDW
-        niCPpwY0+Cb6uEUescA4bY005+vhN2GvEjtYc7kCgYA46J3y+FVOLKH8JzYNxJJT
-        4yw56UfURs+/4fY4JZHIHHi+ulnqZwwd7rd/UATK6Ibwk+zWCu6N/yAWZv1vMNkk
-        kp2t7RrXCpErmfUbIhRzLYY+AExCRYzVIGYYagWSmPYPpMUUuCpT1mri2STvn9Sz
-        YxIWdrezqcNwouwQBSJDAQKBgDzarIWuAmUSrD6Am+pHXnHVu0EQ7X7Zcoe5j7FN
-        k5r7JSSwAFcse8P49uktzxXygaUWIFM9KimUzkexCJ6Q7w2W3gisgUTqI2cw2E0P
-        IjSYWduWohveHDATXXI7F97TALzjh8z0oOVyAlqlvmlAqBTBYLq1zDUIqLJEMxh
-        7M/xAoGAUTArWMheOwlWOOo9ztEK/46o5vBF4tyPyVmm4GTIwpbPKLE5XCqtgm9/
-        U2kdY+x5uXj9mh/63sd0KnrS5dEbRadMEBnSNxo3FuEGRGGXGQJtThD+aCmo/R
-        51HiCMOkL9RHKidTmIv/p3G7OfNaBkSNyrWi3xaxT1kgkbqLNuI=
------END RSA PRIVATE KEY-----
-EOF
-        chmod 400 ~/.ssh/cloud.pem
-        ssh-keyscan -H 13.48.104.165 >> ~/.ssh/known_hosts
-
-    - name: Deploy to EC2 and restart Docker container
-      run: |
-        ssh -i ~/.ssh/cloud.pem -o StrictHostKeyChecking=no ubuntu@13.48.104.165 << 'ENDSSH'
+    - name: Deploy to EC2 with SSH
+      uses: appleboy/ssh-action@v1.1.0
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USER }}
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
           set -euxo pipefail
 
-          cd ~/clothes-crm  # loyihangiz joylashgan katalogga moslang
+          # Loyihaga o‘tamiz
+          cd ~/your_project_directory  # <--- BU YERDA loyihangiz joylashgan to‘liq papka yo‘lini yozing
 
-          # Kodni olib kelish
-          git pull origin master
+          # Kodni yangilaymiz
+          git fetch origin
+          git reset --hard origin/master
 
-          # Docker konteynerlarni qayta ishga tushirish
+          # Docker konteynerni qayta ishga tushiramiz
           sudo docker-compose down || true
           sudo docker-compose build --no-cache
           sudo docker-compose up -d
-
-          # Django migrate va static fayllarni yig‘ish (loyihada kerak bo‘lsa)
-          sudo docker-compose exec -T web python manage.py migrate --noinput
-          sudo docker-compose exec -T web python manage.py collectstatic --noinput --clear || true
-        ENDSSH
