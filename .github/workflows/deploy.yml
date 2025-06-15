@@ -1,36 +1,30 @@
-name: Deploy Django to EC2 via Docker
+
+name: Django CI/CD
 
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   deploy:
-    runs-on: ubuntu-24.04
-    timeout-minutes: 15 
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v3
 
-    - name: Deploy to EC2 with SSH
-      uses: appleboy/ssh-action@v1.1.0
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ${{ secrets.EC2_USER }}
-        key: ${{ secrets.EC2_SSH_KEY }}
-        script: |
-          set -euxo pipefail
-
-          # Loyihaga o‘tamiz
-          cd ~/your_project_directory  # <--- BU YERDA loyihangiz joylashgan to‘liq papka yo‘lini yozing
-
-          # Kodni yangilaymiz
-          git fetch origin
-          git reset --hard origin/master
-
-          # Docker konteynerni qayta ishga tushiramiz
-          sudo docker-compose down || true
-          sudo docker-compose build --no-cache
-          sudo docker-compose up -d
+    - name: Set up SSH key and known hosts
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/cloud.pem
+        chmod 400 ~/.ssh/cloud.pem
+        ssh-keyscan -H 13.48.104.165 >> ~/.ssh/known_hosts
+    - name: Deploy to EC2
+      run: |
+        ssh -i ~/.ssh/cloud.pem ubuntu@13.48.104.165 << 'EOF'
+          cd ~/your_project_folder  # <-- BU joyni loyihangiz joylashgan papkaga o'zgartiring
+          git pull origin main
+          docker-compose down --remove-orphans
+          docker-compose up -d --build
+        EOF
