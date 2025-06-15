@@ -1,4 +1,3 @@
-
 name: Django CI/CD
 
 on:
@@ -14,17 +13,18 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Set up SSH key and known hosts
+    - name: Set up SSH
       run: |
         mkdir -p ~/.ssh
         echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/cloud.pem
-        chmod 400 ~/.ssh/cloud.pem
-        ssh-keyscan -H 13.48.104.165 >> ~/.ssh/known_hosts
+        chmod 600 ~/.ssh/cloud.pem
+        ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+        
     - name: Deploy to EC2
       run: |
-        ssh -i ~/.ssh/cloud.pem ubuntu@13.48.104.165 << 'EOF'
-          cd ~/your_project_folder  # <-- BU joyni loyihangiz joylashgan papkaga o'zgartiring
+        ssh -i ~/.ssh/cloud.pem -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} "
+          cd ~/your_project_folder
           git pull origin main
           docker-compose down --remove-orphans
           docker-compose up -d --build
-        EOF
+        "
