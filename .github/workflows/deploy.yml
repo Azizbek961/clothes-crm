@@ -21,7 +21,7 @@ jobs:
 
     - name: Deploy to EC2
       run: |
-        ssh -o StrictHostKeyChecking=no -i ~/.ssh/cloud.pem ubuntu@13.48.104.165 << 'EOF'
+        ssh -o  -i ~/.ssh/cloud.pem ubuntu@13.48.104.165 << 'EOF'
           cd ~/your_project_folder
           git pull origin main
           docker-compose down
