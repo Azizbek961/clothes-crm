@@ -1,30 +1,39 @@
-name: Django CI/CD
+name: Deploy Django to AWS EC2
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout source
+        uses: actions/checkout@v4
 
-    - name: Set up SSH
-      run: |
-        mkdir -p ~/.ssh
-        echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/cloud.pem
-        chmod 600 ~/.ssh/cloud.pem
-        ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
-        
-    - name: Deploy to EC2
-      run: |
-        ssh -i ~/.ssh/cloud.pem -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} "
-          cd ~/your_project_folder
-          git pull origin main
-          docker-compose down --remove-orphans
-          docker-compose up -d --build
-        "
+      - name: Deploy using SSH
+        uses: appleboy/ssh-action@v1.1.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            set -euxo pipefail
+
+            # Go to your project directory
+            cd ${{ secrets.PROJECT_PATH }}
+
+            # Pull latest code from GitHub
+            git fetch origin
+            git reset --hard origin/main
+
+            # Stop and rebuild docker containers
+            docker-compose down --remove-orphans
+            docker-compose build --no-cache
+            docker-compose up -d
+
+            # Apply migrations & collect static
+            docker-compose exec -T web python manage.py migrate --noinput
+            docker-compose exec -T web python manage.py collectstatic --noinput --clear
