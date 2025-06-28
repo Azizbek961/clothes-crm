@@ -10,7 +10,7 @@
     <div class="card-body">
         <h5 class="card-title">SKU: <span class="fw-normal">{{ product.sku }}</span></h5>
         <p class="card-text"><strong>Narxi:</strong> ${{ product.price|floatformat:2 }}</p>
-        <p class="card-text"><strong>Ombordagi miqdor:</strong> {{ product.stock_quantity }}</p>
+        <p class="card-text"><strong>Dasturchilar soni:</strong> {{ product.stock_quantity }}</p>
         <p class="card-text"><strong>Tavsifi:</strong> {{ product.description|default_if_none:"Tavsif mavjud emas." }}</p>
         <p class="card-text"><strong>Status:</strong> 
             {% if product.is_active %}
